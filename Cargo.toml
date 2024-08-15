@@ -4,3 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+eframe = { version = "0.28.1", default-features = false, features = ["accesskit", "default_fonts", "glow"] }
+egui = "0.28.1"
+egui_extras = "0.28.1"
+serde = { version = "1", features = ["derive"] }
