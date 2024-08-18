@@ -1,11 +1,15 @@
 use eframe::Frame;
 use egui::Context;
 
-pub struct App;
+pub struct App {
+    note: String,
+}
 
 impl Default for App {
     fn default() -> Self {
-        Self
+        Self {
+            note: String::new()
+        }
     }
 }
 
@@ -20,7 +24,9 @@ impl App {
 impl eframe::App for App {
     fn update(&mut self, ctx: &Context, frame: &mut Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
-            ui.label("Greetings from the skeleton app.");
+            ui.label("Note text");
+
+            egui::TextEdit::multiline(&mut self.note).show(ui);
         });
     }
 }
