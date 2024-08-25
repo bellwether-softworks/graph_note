@@ -8,3 +8,4 @@ eframe = { version = "0.28.1", default-features = false, features = ["accesskit"
 egui = "0.28.1"
 egui_extras = "0.28.1"
 serde = { version = "1", features = ["derive"] }
+time = "0.3.36"
