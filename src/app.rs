@@ -42,7 +42,7 @@ impl App {
 }
 
 impl eframe::App for App {
-    fn update(&mut self, ctx: &Context, frame: &mut Frame) {
+    fn update(&mut self, ctx: &Context, _frame: &mut Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
             if ui.button("Add new note").clicked() {
                 self.notes.push(Note::new());
@@ -99,7 +99,7 @@ impl eframe::App for App {
 
             ui.separator();
 
-            if let Some(mut selected_note) = self.notes.get_mut(self.selected_note) {
+            if let Some(selected_note) = self.notes.get_mut(self.selected_note) {
                 ui.horizontal(|ui| {
                     ui.label("Title");
                     ui.text_edit_singleline(&mut selected_note.title);
