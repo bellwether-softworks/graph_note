@@ -1,10 +1,33 @@
+use std::fmt::Formatter;
 use std::time::SystemTime;
 use eframe::Frame;
 use egui::{Context, Grid};
 use time::OffsetDateTime;
 
+pub struct Timestamp(pub u64);
+
+impl std::fmt::Display for Timestamp {
+    fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
+        let as_systemtime = OffsetDateTime::from_unix_timestamp(self.0 as i64)
+            .expect("should be valid datetime");
+
+        write!(f, "{}", as_systemtime.to_string())
+    }
+}
+
+impl Timestamp {
+    pub fn now() -> Self {
+        let secs_since_epoch = SystemTime::now()
+            .duration_since(SystemTime::UNIX_EPOCH)
+            .expect("should produce valid time")
+            .as_secs();
+
+        Self(secs_since_epoch)
+    }
+}
+
 struct Note {
-    created_on: SystemTime,
+    created_on: Timestamp,
     title: String,
     text: String,
 }
@@ -12,7 +35,7 @@ struct Note {
 impl Note {
     pub fn new() -> Self {
         Note {
-            created_on: SystemTime::now(),
+            created_on: Timestamp::now(),
             title: String::new(),
             text: String::new(),
         }
@@ -62,7 +85,7 @@ impl eframe::App for App {
 
                     for (index, note) in self.notes.iter().enumerate() {
                         ui.label(if index == self.selected_note { "*" } else { "" });
-                        ui.label(OffsetDateTime::from(note.created_on).to_string());
+                        ui.label(note.created_on.to_string());
                         ui.label(note.title.as_str());
                         if ui.button("Edit").clicked() {
                             to_select = Some(index);
@@ -105,7 +128,7 @@ impl eframe::App for App {
                     ui.text_edit_singleline(&mut selected_note.title);
                 });
 
-                ui.label(format!("Created at {:?}", OffsetDateTime::from(selected_note.created_on)));
+                ui.label(format!("Created at {}", selected_note.created_on));
 
                 ui.label("Text");
                 egui::TextEdit::multiline(&mut selected_note.text).show(ui);
